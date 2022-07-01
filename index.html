@@ -21,9 +21,12 @@
 <p><em>Thank you for using Bitgesell.</em></p>
 
 <u>Node status</u><br>
+Version: <b id="ve"></b><br>
 Blocks: <b id="bl"></b><br>
 Score: <b id="sc"></b><br>
-Connections: <b id="co"></b>
+Connections (in/out): <b id="co"></b><br>
+Address: <b id="ip"></b>
+
 <script>
 fetch()
 function fetch() {
@@ -34,9 +37,14 @@ axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getblockcount","p
 })
 axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getnetworkinfo","params":[]}).then(function(res){
     sc=res.data.result.localaddresses[0].score
-    co=res.data.result.connections;
+    coi=res.data.result.connections_in;
+    coo=res.data.result.connections_out;
+    ip=res.data.result.localaddresses[0].address;
+    ve=res.data.result.version;
     document.getElementById('sc').innerHTML=sc;
-    document.getElementById('co').innerHTML=co;
+    document.getElementById('co').innerHTML=coi + '/' + coo;
+    document.getElementById('ve').innerHTML=ve;
+    document.getElementById('ip').innerHTML=ip + ':8454';
 })
 }
 </script>
