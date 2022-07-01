@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to BGL!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 5%  auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+<link rel="icon" href="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-32x32.png" sizes="32x32" />
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<img src="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-192x192.png" sizes="192x192" />
+<h1>Welcome to BGL node</h1>
+<p>This is  alternative RPC endpoint for <a href="https://app.bglwallet.io/">app.bglwallet.io</a>.</p>
+<p>HOW TO USE: After logging in into wallet, in the top right there is a button labeled
+"Node RPC", user should click on it and paste new RPC URL as following: https://bglnode.online</p>
+<p><em>Thank you for using Bitgesell.</em></p>
+
+<u>Node status</u><br>
+Blocks: <b id="bl"></b><br>
+Score: <b id="sc"></b><br>
+Connections: <b id="co"></b>
+<script>
+fetch()
+function fetch() {
+var bl="", sc="", co=""; 
+axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getblockcount","params":[]}).then(function(res){
+    bl=res.data.result;
+    document.getElementById('bl').innerHTML=bl;
+})
+axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getnetworkinfo","params":[]}).then(function(res){
+    sc=res.data.result.localaddresses[0].score
+    co=res.data.result.connections;
+    document.getElementById('sc').innerHTML=sc;
+    document.getElementById('co').innerHTML=co;
+})
+}
+</script>
+</body>
+</html>
