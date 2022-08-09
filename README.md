@@ -1,3 +1,5 @@
+<img src="doc/bglnode.png">
+
 This is alternative RPC endpoint for BGL wallets:
 
 Mainnet [app.bglwallet.io](https://app.bglwallet.io) RPC bglnode.online
