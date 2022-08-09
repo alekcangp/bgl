@@ -1,4 +1,4 @@
-<img src="doc/bglnode.png">
+<img src="bglnode.png">
 
 This is alternative RPC endpoint for BGL wallets:
 
