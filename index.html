@@ -7,30 +7,87 @@
         width: 35em;
         margin: 5%  auto;
         font-family: Tahoma, Verdana, Arial, sans-serif;
+        margin-top: -40px;
     }
+
+input {
+  padding: 5px 10px;
+  color: black;
+  font-size: 20px;
+  border: solid 1px black; 
+  border-radius: 3px;
+  width: 230px;
+}
+
+input:focus {
+  background-color: rgb(133, 105, 255);
+  color: white;
+  transition: 350ms all;
+}
+
+button {
+  border: none; 
+  background-color: black; 
+  color: white; 
+  font-size: 20px;
+  border-radius: 3px; 
+  padding: 5px 20px;
+  margin-left: 10px;
+  transition: 350ms all;
+}
+h1 {
+    margin-top: -60px;
+}
+
+button:hover {
+  background-color: #ff5585;
+}
 </style>
 <link rel="icon" href="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-32x32.png" sizes="32x32" />
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<img src="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-192x192.png" sizes="192x192" />
+<img src="header-image.svg" />
+<!--<img src="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-192x192.png" sizes="192x192" />-->
 <h1>Welcome to BGL node</h1>
-<p>This is  alternative RPC endpoint for <a href="https://app.bglwallet.io/">app.bglwallet.io</a>.</p>
+<p>This is  alternative RPC endpoint for BGL wallets:<br>
+ <a href="https://app.bglwallet.io/">app.bglwallet.io (mainnet)</a><br>
+<a href="https://wallet.bglnode.online/">wallet.bglnode.online (testnet)</a></p>
 <p>HOW TO USE: After logging in into wallet, in the top right there is a button labeled
-"Node RPC", user should click on it and paste new RPC URL as following: https://bglnode.online</p>
+"Node RPC", user should click on it and paste new RPC URL as following:<br>
+ https://bglnode.online (mainnet)<br>
+ https://api.bglnode.online (testnet)</p>
 <p><em>Thank you for using Bitgesell.</em></p>
 
-<u>Node status</u><br>
+<u>Node status (mainnet)</u><br>
 Version: <b id="ve"></b><br>
 Blocks: <b id="bl"></b><br>
 Score: <b id="sc"></b><br>
 Connections (in/out): <b id="co"></b><br>
 Address: <b id="ip"></b>
+<hr>
+<u>Node status (testnet)</u><br>
+Version: <b id="vet"></b><br>
+Blocks: <b id="blt"></b><br>
+Score: <b id="sct"></b><br>
+Connections (in/out): <b id="cot"></b><br>
+Address: <b id="ipt"></b>
+<hr>
+<h3>FAUCET</h3>
+<form>
+    <input id="address" placeholder="Enter address tbgl...">
+    <button id="action">Send 1 BGL</button>
+</form>
+<div id="tx"></div>
+
+
+
+
 
 <script>
 fetch()
 function fetch() {
-var bl="", sc="", co=""; 
+var bl="", sc="", co="";
 axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getblockcount","params":[]}).then(function(res){
     bl=res.data.result;
     document.getElementById('bl').innerHTML=bl;
@@ -47,6 +104,59 @@ axios.post("https://bglnode.online",{"jsonrpc":"1.0","method":"getnetworkinfo","
     document.getElementById('ip').innerHTML=ip + ':8454';
 })
 }
+fetcht()
+function fetcht() {
+var bl="", sc="", co="";
+axios.post("https://api.bglnode.online",{"jsonrpc":"1.0","method":"getblockcount","params":[]}).then(function(res){
+    bl=res.data.result;
+    document.getElementById('blt').innerHTML=bl;
+})
+axios.post("https://api.bglnode.online",{"jsonrpc":"1.0","method":"getnetworkinfo","params":[]}).then(function(res){
+    sc=res.data.result.localaddresses[0].score
+    coi=res.data.result.connections_in;
+    coo=res.data.result.connections_out;
+    ip=res.data.result.localaddresses[0].address;
+    ve=res.data.result.version;
+    document.getElementById('sct').innerHTML=sc;
+    document.getElementById('cot').innerHTML=coi + '/' + coo;
+    document.getElementById('vet').innerHTML=ve;
+    document.getElementById('ipt').innerHTML=ip + ':18332';
+})
+}
+
+
+function faucet(addr) {
+axios.post("https://api.bglnode.online",{"jsonrpc":"1.0","method":"sendtoaddress","params":[addr, 1]}).then(function(res){
+    txid=res.data.result;
+    document.getElementById('tx').innerHTML="Sending...";
+    setTimeout(function(){
+
+    if (txid != null) {
+        document.getElementById('tx').innerHTML="Success! <a href='https://testnet.bglnode.online/tx/" + txid + "' target='_blank'>" + txid + "</a>"
+    }
+    else {
+        document.getElementById('tx').innerHTML="Unsuccess: " + res.data.error;
+    }
+
+    },2000)
+    
+}).catch(function(e){
+    document.getElementById('tx').innerHTML="Unsuccess. Check the address. " + e;
+})
+}
+
+
+var addr, btn = document.getElementById('action');
+
+btn.addEventListener('click', function(event) {
+  document.getElementById('tx').innerText="";
+  event.preventDefault();
+  var addr = document.getElementById('address').value;
+  faucet(addr)
+  }
+
+);
+
 </script>
 </body>
 </html>
