@@ -47,7 +47,7 @@ button:hover {
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<img src="header-image.svg" />
+<img src="../header-image.svg" />
 <!--<img src="https://bitgesell.ca/wp-content/uploads/2022/03/cropped-icondark.fw_-192x192.png" sizes="192x192" />-->
 <h1>Welcome to BGL node</h1>
 <p>This is  alternative RPC endpoint for BGL wallets:<br>
@@ -79,9 +79,6 @@ Address: <b id="ipt"></b>
     <button id="action">Send 1 BGL</button>
 </form>
 <div id="tx"></div>
-
-
-
 
 
 <script>
@@ -124,30 +121,26 @@ axios.post("https://api.bglnode.online",{"jsonrpc":"1.0","method":"getnetworkinf
 })
 }
 
-
 function faucet(addr) {
 axios.post("https://api.bglnode.online",{"jsonrpc":"1.0","method":"sendtoaddress","params":[addr, 1]}).then(function(res){
     txid=res.data.result;
     document.getElementById('tx').innerHTML="Sending...";
     setTimeout(function(){
-
     if (txid != null) {
         document.getElementById('tx').innerHTML="Success! <a href='https://testnet.bglnode.online/tx/" + txid + "' target='_blank'>" + txid + "</a>"
     }
     else {
         document.getElementById('tx').innerHTML="Unsuccess: " + res.data.error;
     }
-
     },2000)
     
 }).catch(function(e){
     document.getElementById('tx').innerHTML="Unsuccess. Check the address. " + e;
 })
+    
 }
 
-
 var addr, btn = document.getElementById('action');
-
 btn.addEventListener('click', function(event) {
   document.getElementById('tx').innerText="";
   event.preventDefault();
