@@ -1,7 +1,7 @@
 This is alternative RPC endpoint for BGL wallets:
 
-app.bglwallet.io (mainnet)
+Mainnet [app.bglwallet.io](https://app.bglwallet.io) RPC bglnode.online
 
-wallet.bglnode.online (testnet)
+Testnet [wallet.bglnode.online](https://wallet.bglnode.online) RPC api.bglnode.online
 
 Available methods: getblockcount, getconnectioncount, getblockchaininfo, getnetworkinfo, sendrawtransaction.
